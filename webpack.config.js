@@ -1,9 +1,11 @@
 module.exports = {
 
-    entry: './src/index.js',
+    entry: {
+        '01': './01-modules/entry.js'
+    },
 
     output: {
-        filename: 'bundle.js',
+        filename: 'bundle.[name].js',
         path: './dist/',
         publicPath: '/dist/'
     },
@@ -19,6 +21,10 @@ module.exports = {
                 ]
             }
         ]
+    },
+
+    devServer: {
+        inline: true
     }
 
 };

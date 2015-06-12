@@ -1,7 +1,7 @@
 module.exports = {
 
     entry: {
-        '01': './01-modules/entry.js'
+        '01': './01-modules/index.js'
     },
 
     output: {

@@ -1,13 +1,13 @@
 {
   "name": "react-sandbox",
-  "description": "A ready-to-go environment for fiddling with ES6 React",
+  "description": "A turnkey environment for fiddling with ES6 React",
   "author": "Conor Timothy Ryan <ctryan3@gmail.com>",
   "private": true,
   "scripts": {
       "preinstall": "npm install -g webpack && npm install -g webpack-dev-server",
       "server": "webpack-dev-server --inline"
   },
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "^5.2.15",
     "babel-loader": "^5.0.0",
     "react": "^0.13.3",

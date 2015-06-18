@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Webpack and Modules</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Modular JavaScript with Webpack
+
+#### ConorR, PSP Team
+
+---
+
+# How to organize JavaScript code?
+
+- Why is modular code good?
+    - Separation of concerns
+    - Code re-use
+    - more reasons
+- Given that we want to keep code in separate files (modules), how do we define a JavaScript object in file A and use it in file B?
+- How do we do this in the browser?
+
+---
+
+# Module loading, solution 1
+
+- Load both fileA.js and fileB.js on the page using script tags
+- Variables, objects, classes etc. defined in file A can be referenced in file B
+
+```javascript
+// fileA.js - class definition
+function MyClass() {
+    ...
+}
+```
+
+```javascript
+// fileB.js - class instantiation
+var myClass = new MyClass();
+```
+
+---
+
+# Module loading, solution 1
+
+- Drawbacks
+    - Have to worry about loading order, e.g. fileA.js script tag must appear above fileB.js script tag
+    - Inefficient at scale because the client must fetch multiple scripts
+    - Uses the global namespace, i.e. `window`
+        - The global namespace is evil!
+            - http://yuiblog.com/blog/2006/06/01/global-domination/
+            - http://c2.com/cgi/wiki?GlobalVariablesAreBad
+
+```javascript
+// browser console
+> window.MyClass
+< function MyClass() {...}
+```
+
+^ this is bad!
+
+---
+
+# Module loading, solution 2 (better)
+
+- Have modules put exports into a protected namespace inside `window`
+
+```javascript
+// myClass.js
+(function(MYAPP){
+
+    function MyClass() {...}
+    
+    MYAPP.MyClass = MyClass;
+
+}(window.MYAPP = window.MYAPP || {}))
+```
+
+```javascript
+// in another module...
+MYAPP = window.MYAPP || {};
+var myClass = new MYAPP.MyClass();
+```
+
+- Assemble a "build" by concatenating module files together into one file
+- Put the build on the page using a script tag
+
+---
+
+# Module loading, solution 2 (better)
+
+- Advantages
+    - No longer using global namespace
+    - Can modularize your code
+- Disadvantages
+    - With large apps, building after every change can slow down development
+    - Single build target; all pages load the same build
+    - Not bad, widely used, "good enough"
+
+---
+
+# Meanwhile
+
+- Every programming language supports loading code defined somewhere else
+
+    ```c
+    using System.Collections.Generic; // C#
+    ```
+
+    ```python
+    import datetime # Python
+    ```
+
+    ```java
+    import java.util.Scanner // Java
+    ```
+
+    ```c
+    #include &lt;stdio.h&gt; // c
+    ```
+
+- Why doesn't JavaScript support this?
+
+.left[![Left-aligned image](https://healingthemasses.files.wordpress.com/2013/08/wpid-875d1374620718t-grom-here-jackie-chan-my-brain-full-fuck-meme-blank-template-lol-wtf.jpeg)]
+
+---
+
+# Meanwhile
+
+- Answer: it does! That is, certain runtimes do
+- In the node runtime we can use `require` to import modules
+
+```javascript
+// fs is in the node standard library
+var fs = require('fs');
+fs.rename('foo.js', 'bar.js', function(err) {
+    ...
+});
+
+// can require custom modules too!
+var myModule = require('./myModule.js');
+var instance = new myModule.MyClass({...});
+```
+
+---
+
+# Meanwhile
+
+- As in other programming languages, `require` guarantees the module will be available &mdash; or it will fail at compile time
+- Contrast this guarantee with storing references in the `window` namespace, which can be freely modified by third parties
+- Get used to thinking of JavaScript as a compiled language and not "a bunch of scripts on the page"
+
+---
+
+# Meanwhile
+
+- Browser runtimes do not support `require` (yet...)
+- Why _shouldn't_ we be able to use `require` in the browser?
+
+.right[![Right-aligned image](http://captainmeme.com/templates/Sudden_Clarity_Clarence.jpg)]
+
+---
+
+# Searching for the right tool
+
+- Any good compiler has:
+    - Preprocessing
+    - Linking/loading
+    - CLI support
+- RequireJS was an early solution, but no CLI
+- Browserify has CLI, but no preprocessing
+
+---
+
+# Webpack
+
+- Webpack checks all the boxes
+- Rich features
+    - CLI
+    - Highly configurable
+    - Preprocessing using "loaders"
+    - webpack-dev-server
+    - Hot loading
+    - Can bundle CSS, images, etc.
+- The React community has more or less coalesced around Webpack
+
+.right[![Right-aligned image](https://camo.githubusercontent.com/f1d103872f836f33dbff7a74ed819004f792a4ad/687474703a2f2f7765627061636b2e6769746875622e696f2f6173736574732f6c6f676f2e706e67)]
+
+---
+
+class: center, middle
+
+# Demo
+
+
+
+    </textarea>
+    <script src="../lib/remark.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
